@@ -2,6 +2,12 @@
 ### *Industrial Approval Dependency & Critical-Path Execution Platform*
 **SIH 2026 Problem Statement: SIH26130**
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel%20Production-blue?style=for-the-badge&logo=vercel)](https://udyogsetu-orcin.vercel.app)
+[![GitHub Repository](https://img.shields.io/badge/GitHub-CodieRepo%2FUDYOGOS-181717?style=for-the-badge&logo=github)](https://github.com/CodieRepo/UDYOGOS)
+
+* **🌐 Live Production MVP:** [https://udyogsetu-orcin.vercel.app](https://udyogsetu-orcin.vercel.app)
+* **📦 Primary Repository:** [https://github.com/CodieRepo/UDYOGOS.git](https://github.com/CodieRepo/UDYOGOS.git)
+
 ---
 
 ## 📌 Executive Summary
