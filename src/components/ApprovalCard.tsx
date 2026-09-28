@@ -13,6 +13,7 @@ import {
   FileWarning,
   HelpCircle,
   Lock,
+  ShieldCheck,
   Sparkles,
   Zap
 } from "lucide-react";
@@ -101,6 +102,19 @@ export const ApprovalCard: React.FC<ApprovalCardProps> = ({ node, onSelect, onSi
         <p className="text-[11px] text-slate-500 mt-0.5 font-medium line-clamp-1">
           {node.department}
         </p>
+
+        {/* Provenance Indicator */}
+        {node.provenance?.verification_status === "verified_statutory" ? (
+          <div className="mt-1.5 flex items-center gap-1 text-[10px] text-emerald-800 font-medium bg-emerald-50/80 px-1.5 py-0.5 rounded border border-emerald-200">
+            <ShieldCheck className="w-3 h-3 text-emerald-600 shrink-0" />
+            <span className="line-clamp-1">{node.provenance.statutory_act}</span>
+          </div>
+        ) : (
+          <div className="mt-1.5 flex items-center gap-1 text-[10px] text-slate-500 font-medium bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0"></span>
+            <span className="line-clamp-1">Demonstration Procedural Rule</span>
+          </div>
+        )}
 
         {/* Concise Card Body Hierarchy */}
         <div className="mt-3 text-xs space-y-2">

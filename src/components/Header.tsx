@@ -3,10 +3,10 @@
 import React from "react";
 import { useCompliance } from "../context/ComplianceContext";
 import { DEMO_PROFILES } from "../data/demonstrationDataset";
-import { Factory, RefreshCw } from "lucide-react";
+import { Factory, FileDown, RefreshCw } from "lucide-react";
 
 export const Header: React.FC = () => {
-  const { profile, setProfileById, resetDemo } = useCompliance();
+  const { profile, setProfileById, resetDemo, setIsExportModalOpen } = useCompliance();
 
   return (
     <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-xs">
@@ -69,6 +69,16 @@ export const Header: React.FC = () => {
               ))}
             </select>
           </div>
+
+          {/* Export Blueprint Dossier Button */}
+          <button
+            onClick={() => setIsExportModalOpen(true)}
+            title="Generate printable industrial compliance blueprint dossier"
+            className="flex items-center gap-1.5 text-xs font-bold text-blue-700 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg py-1.5 px-3 transition-colors shadow-2xs cursor-pointer"
+          >
+            <FileDown className="w-3.5 h-3.5 text-blue-600" />
+            <span>Export Blueprint</span>
+          </button>
 
           {/* Reset Demo Button */}
           <button

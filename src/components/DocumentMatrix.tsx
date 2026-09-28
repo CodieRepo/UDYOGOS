@@ -5,13 +5,17 @@ import { useCompliance } from "../context/ComplianceContext";
 import { DEMO_DOCUMENTS } from "../data/demonstrationDataset";
 import {
   AlertTriangle,
+  ArrowRight,
   Building,
   CheckCircle2,
+  Clock,
   FileCheck2,
   FileSpreadsheet,
   FileWarning,
+  GitFork,
   Info,
   Layers,
+  ShieldAlert,
   UploadCloud,
   X
 } from "lucide-react";
@@ -25,6 +29,39 @@ export const DocumentMatrix: React.FC = () => {
   const activeDoc = selectedDocId
     ? DEMO_DOCUMENTS.find((d) => d.id === selectedDocId)
     : DEMO_DOCUMENTS.find((d) => !availableDocumentIds.has(d.id)) || DEMO_DOCUMENTS[0];
+
+  // Downstream cascade dependency calculation
+  const directlyBlockedApprovals = (activeDoc?.requiredByApprovalIds || [])
+    .map((id) => approvalMap.get(id))
+    .filter((a): a is NonNullable<typeof a> => Boolean(a));
+
+  const downstreamCascadeMap = new Map<string, Array<{ id: string; title: string; slaDays: number }>>();
+  const allStalledApprovalIds = new Set<string>(directlyBlockedApprovals.map((a) => a.id));
+
+  directlyBlockedApprovals.forEach((directApp) => {
+    const queue = [directApp.id];
+    const visited = new Set<string>();
+    const downstreamList: Array<{ id: string; title: string; slaDays: number }> = [];
+
+    while (queue.length > 0) {
+      const currId = queue.shift()!;
+      for (const app of approvals) {
+        if (app.prerequisiteIds.includes(currId) && !visited.has(app.id)) {
+          visited.add(app.id);
+          allStalledApprovalIds.add(app.id);
+          downstreamList.push({ id: app.id, title: app.title, slaDays: app.slaDays });
+          queue.push(app.id);
+        }
+      }
+    }
+    if (downstreamList.length > 0) {
+      downstreamCascadeMap.set(directApp.id, downstreamList);
+    }
+  });
+
+  const totalStalledSlaDays = Array.from(allStalledApprovalIds)
+    .map((id) => approvalMap.get(id)?.slaDays || 0)
+    .reduce((sum, d) => sum + d, 0);
 
   return (
     <div className="space-y-6">
@@ -95,36 +132,93 @@ export const DocumentMatrix: React.FC = () => {
             </button>
           </div>
 
-          {/* Blocking Impact Box */}
-          <div className="mt-4 pt-3 border-t border-slate-200/80">
+          {/* Blocking Impact & Downstream Cascade View */}
+          <div className="mt-4 pt-3 border-t border-slate-200/80 space-y-3">
             {!availableDocumentIds.has(activeDoc.id) ? (
-              <div className="bg-white/90 border border-red-200 rounded-lg p-3 text-xs text-red-950">
-                <div className="font-bold text-red-900 uppercase text-[10px] flex items-center gap-1 mb-1">
-                  <AlertTriangle className="w-3.5 h-3.5 text-red-600" />
-                  THIS MISSING DOCUMENT IS CURRENTLY BLOCKING:
+              <div className="bg-white/95 border border-red-200 rounded-lg p-3.5 text-xs text-red-950 space-y-3 shadow-2xs">
+                {/* Header summary strip */}
+                <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-red-100">
+                  <div className="font-bold text-red-900 uppercase text-[10px] flex items-center gap-1.5">
+                    <AlertTriangle className="w-4 h-4 text-red-600 shrink-0" />
+                    <span>Statutory Impact & Downstream Cascade Blocker Analysis</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-red-100 text-red-900 border border-red-300">
+                      {allStalledApprovalIds.size} Total Approvals Frozen
+                    </span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300 flex items-center gap-1">
+                      <Clock className="w-3 h-3 text-amber-700" />
+                      ~{totalStalledSlaDays} Days Cumulative Processing at Risk
+                    </span>
+                  </div>
                 </div>
-                <div className="flex flex-wrap gap-1.5 mt-1">
-                  {activeDoc.requiredByApprovalIds.map((id) => {
-                    const app = approvalMap.get(id);
-                    return (
-                      <span
-                        key={id}
-                        className="text-xs font-bold bg-red-100 text-red-900 border border-red-300 px-2.5 py-1 rounded shadow-2xs"
+
+                {/* Level 1: Direct Blockers */}
+                <div>
+                  <span className="text-[10px] font-bold uppercase text-slate-500 block mb-1.5">
+                    Tier 1: Direct Filing Blockers (Cannot submit application without this document):
+                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    {directlyBlockedApprovals.map((app) => (
+                      <div
+                        key={app.id}
+                        className="bg-red-50 border border-red-300 rounded-md p-2 flex items-center gap-2 shadow-2xs"
                       >
-                        {app?.title || id}
-                      </span>
-                    );
-                  })}
+                        <ShieldAlert className="w-3.5 h-3.5 text-red-600 shrink-0" />
+                        <div>
+                          <div className="font-bold text-red-950 text-xs">{app.title}</div>
+                          <div className="text-[10px] text-red-700 font-mono">
+                            {app.code} • {app.department} ({app.slaDays}d SLA)
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <p className="text-[11px] text-slate-600 mt-2">
-                  <strong>Why does this matter?</strong> If you apply without this certificate, both departments will issue an objection notice and freeze your file.
+
+                {/* Level 2: Downstream Cascade Chains */}
+                {downstreamCascadeMap.size > 0 && (
+                  <div className="space-y-2 pt-1">
+                    <span className="text-[10px] font-bold uppercase text-slate-500 block">
+                      Tier 2: Downstream Approvals Stalled in Cascade:
+                    </span>
+                    <div className="space-y-2 bg-slate-50 rounded-lg p-2.5 border border-slate-200">
+                      {Array.from(downstreamCascadeMap.entries()).map(([directId, downstreamList]) => {
+                        const directApp = approvalMap.get(directId);
+                        return (
+                          <div key={directId} className="flex flex-col sm:flex-row items-start sm:items-center gap-2 text-[11px]">
+                            <div className="font-semibold text-slate-800 bg-white border border-slate-300 rounded px-2 py-0.5 shrink-0">
+                              {directApp?.title || directId}
+                            </div>
+                            <ArrowRight className="w-3.5 h-3.5 text-slate-400 shrink-0 hidden sm:inline" />
+                            <div className="flex flex-wrap items-center gap-1.5">
+                              <span className="text-[10px] text-slate-500 font-medium">stalls downstream:</span>
+                              {downstreamList.map((ds) => (
+                                <span
+                                  key={ds.id}
+                                  className="font-mono text-[10px] font-semibold bg-amber-50 border border-amber-300 text-amber-900 rounded px-2 py-0.5"
+                                >
+                                  {ds.title}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Practical Advice */}
+                <p className="text-[11px] text-slate-600 bg-slate-50 p-2.5 rounded border border-slate-200">
+                  <strong className="text-slate-800">Scrutiny Warning:</strong> Under the Maharashtra Right to Public Services Act (RTSA), submitting an application without this prerequisite document will trigger a formal scrutiny rejection or Deficiency Memo, pausing the statutory timeline until rectified.
                 </p>
               </div>
             ) : (
               <div className="bg-white/90 border border-emerald-200 rounded-lg p-3 text-xs text-emerald-950">
                 <div className="font-bold text-emerald-900 uppercase text-[10px] flex items-center gap-1 mb-1">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                  SHARED ACROSS {activeDoc.requiredByApprovalIds.length} APPROVALS:
+                  SHARED ACROSS {activeDoc.requiredByApprovalIds.length} STATUTORY APPROVALS:
                 </div>
                 <div className="flex flex-wrap gap-1.5 mt-1">
                   {activeDoc.requiredByApprovalIds.map((id) => {

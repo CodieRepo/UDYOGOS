@@ -274,7 +274,8 @@ export function deriveNextBestActions(
       slaDays: node.slaDays,
       rationale,
       unblocksTitles: unblocks,
-      missingDocumentTitles: missingDocs
+      missingDocumentTitles: missingDocs,
+      provenance: node.provenance
     };
   });
 

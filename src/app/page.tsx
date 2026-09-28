@@ -9,6 +9,7 @@ import { DependencyMap } from "../components/DependencyMap";
 import { NextBestActions } from "../components/NextBestActions";
 import { DocumentMatrix } from "../components/DocumentMatrix";
 import { ClearanceDrawer } from "../components/ClearanceDrawer";
+import { ComplianceBlueprintExport } from "../components/ComplianceBlueprintExport";
 import { WhatIfLab } from "../components/WhatIfLab";
 import { Cpu, GitGraph, ShieldCheck } from "lucide-react";
 
@@ -34,6 +35,9 @@ export default function Home() {
 
       {/* Slide-over Inspection Drawer */}
       <ClearanceDrawer />
+
+      {/* Printable Compliance Blueprint Export Modal */}
+      <ComplianceBlueprintExport />
 
       {/* Platform Footer */}
       <footer className="border-t border-slate-200 bg-white py-6 mt-12 text-xs text-slate-500">

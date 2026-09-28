@@ -30,12 +30,15 @@ interface ComplianceContextType {
   simulateClearance: (nodeId: string) => void;
   resetDemo: () => void;
   setProfileById: (profileId: string) => void;
+  updateProfileOverrides: (overrides: Partial<PlantProfile>) => void;
   updateDocumentStatus: (docId: string, isAvailable: boolean) => void;
   availableDocumentIds: Set<string>;
   lastEvent: RecalculationEvent | null;
   clearLastEvent: () => void;
   selectedDocId: string | null;
   setSelectedDocId: (id: string | null) => void;
+  isExportModalOpen: boolean;
+  setIsExportModalOpen: (open: boolean) => void;
 }
 
 const ComplianceContext = createContext<ComplianceContextType | undefined>(undefined);
@@ -43,21 +46,32 @@ const ComplianceContext = createContext<ComplianceContextType | undefined>(undef
 export const ComplianceProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Always initialize directly to Apex Precision Engineering (index 0)
   const [profileId, setProfileId] = useState<string>(DEMO_PROFILES[0].id);
+  const [customOverrides, setCustomOverrides] = useState<Partial<PlantProfile> | null>(null);
   const [completedNodeIds, setCompletedNodeIds] = useState<Set<string>>(new Set(["node-1"]));
   const [inProgressNodeIds, setInProgressNodeIds] = useState<Set<string>>(new Set());
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<ActiveTab>("overview");
   const [lastEvent, setLastEvent] = useState<RecalculationEvent | null>(null);
   const [selectedDocId, setSelectedDocId] = useState<string | null>(null);
+  const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false);
 
   // Document availability tracker
   const [availableDocIds, setAvailableDocIds] = useState<Set<string>>(
     new Set(DEMO_DOCUMENTS.filter(d => d.isAvailableDefault).map(d => d.id))
   );
 
-  const profile = useMemo(() => {
+  const baseProfile = useMemo(() => {
     return DEMO_PROFILES.find(p => p.id === profileId) || DEMO_PROFILES[0];
   }, [profileId]);
+
+  // Merged profile including any live CPCB or Cluster overrides
+  const profile: PlantProfile = useMemo(() => {
+    if (!customOverrides) return baseProfile;
+    return {
+      ...baseProfile,
+      ...customOverrides
+    };
+  }, [baseProfile, customOverrides]);
 
   // Compute master engine state reactively
   const engineState = useMemo(() => {
@@ -77,6 +91,13 @@ export const ComplianceProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
   const selectApproval = (nodeId: string | null) => {
     setSelectedNodeId(nodeId);
+  };
+
+  const updateProfileOverrides = (overrides: Partial<PlantProfile>) => {
+    setCustomOverrides(prev => ({
+      ...(prev || {}),
+      ...overrides
+    }));
   };
 
   const simulateClearance = (nodeId: string) => {
@@ -149,17 +170,20 @@ export const ComplianceProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   // Reset Demo always resets to Apex Precision Engineering baseline
   const resetDemo = () => {
     setProfileId(DEMO_PROFILES[0].id);
+    setCustomOverrides(null);
     setCompletedNodeIds(new Set(["node-1"]));
     setInProgressNodeIds(new Set());
     setSelectedNodeId(null);
     setSelectedDocId(null);
     setAvailableDocIds(new Set(DEMO_DOCUMENTS.filter(d => d.isAvailableDefault).map(d => d.id)));
     setLastEvent(null);
+    setIsExportModalOpen(false);
     setActiveTab("overview");
   };
 
   const setProfileById = (id: string) => {
     setProfileId(id);
+    setCustomOverrides(null);
     setCompletedNodeIds(new Set(["node-1"]));
     setInProgressNodeIds(new Set());
     setSelectedNodeId(null);
@@ -191,12 +215,15 @@ export const ComplianceProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         simulateClearance,
         resetDemo,
         setProfileById,
+        updateProfileOverrides,
         updateDocumentStatus,
         availableDocumentIds: availableDocIds,
         lastEvent,
         clearLastEvent,
         selectedDocId,
-        setSelectedDocId
+        setSelectedDocId,
+        isExportModalOpen,
+        setIsExportModalOpen
       }}
     >
       {children}

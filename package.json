@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "test:engine": "tsx src/scripts/verify-engine.ts",
+    "test:phase2": "tsx src/scripts/verify-phase2.ts",
     "test:simulation": "python src/scripts/run_validation_simulation.py",
     "generate:notebook": "python src/scripts/generate-notebook.py"
   },

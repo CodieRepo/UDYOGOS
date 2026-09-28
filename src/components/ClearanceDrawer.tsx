@@ -9,12 +9,15 @@ import {
   Building,
   CheckCircle2,
   Clock,
+  ExternalLink,
   FileCheck2,
   FileWarning,
   GitBranch,
   HelpCircle,
   Lock,
   Route,
+  Scale,
+  ShieldCheck,
   Sparkles,
   X,
   Zap
@@ -75,12 +78,72 @@ export const ClearanceDrawer: React.FC = () => {
 
         {/* Drawer Body */}
         <div className="p-5 space-y-6 flex-1 text-xs">
-          {/* Statutory Reference Badge */}
-          <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 text-slate-700">
-            <span className="text-[10px] uppercase font-bold text-slate-500 block mb-0.5">
-              Statutory Reference (Demonstration Ruleset)
-            </span>
-            <p className="font-mono text-slate-900 font-semibold">{node.statutoryRuleRef}</p>
+          {/* Statutory & Legal Provenance Card */}
+          <div className="bg-slate-50 border border-slate-200 rounded-lg p-3.5 space-y-2">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 flex items-center gap-1.5">
+                <Scale className="w-3.5 h-3.5 text-slate-600" />
+                Statutory Authority & Grounding
+              </span>
+              {node.provenance?.verification_status === "verified_statutory" ? (
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 flex items-center gap-1">
+                  <ShieldCheck className="w-3 h-3 text-emerald-700" />
+                  Verified Statutory Source
+                </span>
+              ) : (
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-700">
+                  Demonstration Rule
+                </span>
+              )}
+            </div>
+
+            {node.provenance ? (
+              <div className="space-y-1.5 pt-1 border-t border-slate-200">
+                <div className="flex items-baseline justify-between text-xs">
+                  <span className="text-slate-500 text-[11px]">Governing Act:</span>
+                  <span className="font-bold text-slate-900 text-right">{node.provenance.statutory_act}</span>
+                </div>
+                {node.provenance.section_or_rule && (
+                  <div className="flex items-baseline justify-between text-xs">
+                    <span className="text-slate-500 text-[11px]">Enabling Section / Rule:</span>
+                    <span className="font-mono font-semibold text-blue-900 text-right">{node.provenance.section_or_rule}</span>
+                  </div>
+                )}
+                {node.provenance.service_code && (
+                  <div className="flex items-baseline justify-between text-xs">
+                    <span className="text-slate-500 text-[11px]">Single Window Service Code:</span>
+                    <span className="font-mono text-slate-800 text-right font-medium">{node.provenance.service_code}</span>
+                  </div>
+                )}
+                {node.provenance.rtsa_statutory_timeline_days && (
+                  <div className="flex items-baseline justify-between text-xs">
+                    <span className="text-slate-500 text-[11px]">Right to Services Act (RTSA) SLA:</span>
+                    <span className="font-mono font-semibold text-emerald-800 text-right">{node.provenance.rtsa_statutory_timeline_days} Days</span>
+                  </div>
+                )}
+                {node.provenance.source_url && (
+                  <div className="pt-1.5 flex items-center justify-between text-[11px]">
+                    <span className="text-slate-500">Official Portal:</span>
+                    <a
+                      href={node.provenance.source_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-semibold underline"
+                    >
+                      <span>{node.provenance.source_organization || "Public Portal"}</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                )}
+                {node.provenance.legal_disclaimer && (
+                  <p className="text-[10px] text-slate-500 italic pt-1">
+                    Note: {node.provenance.legal_disclaimer}
+                  </p>
+                )}
+              </div>
+            ) : (
+              <p className="font-mono text-slate-900 font-semibold text-xs pt-1">{node.statutoryRuleRef}</p>
+            )}
           </div>
 
           {/* Key Metrics Strip */}
