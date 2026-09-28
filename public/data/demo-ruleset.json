@@ -1,0 +1,335 @@
+{
+  "metadata": {
+    "platform": "UDYOGSETU (उद्योगसेतु)",
+    "version": "1.0.0",
+    "problemStatement": "SIH 2026 Problem Statement SIH26130 — Efficiency in Streamlining Industrial Approvals",
+    "disclaimer": "Illustrative Demonstration Ruleset / Synthetic Data for Hackathon Evaluation. Not an official statutory repository.",
+    "generatedAt": "2026-09-28T12:00:00Z"
+  },
+  "profiles": [
+    {
+      "id": "profile-apex-eng",
+      "name": "Apex Precision Engineering",
+      "companyName": "Apex Precision Engineering Pvt. Ltd.",
+      "location": "Chakan Industrial Area, Phase II, Pune",
+      "stateOrRegion": "Maharashtra",
+      "sector": "engineering",
+      "sectorLabel": "Light Engineering & CNC Machining",
+      "pollutionCategory": "orange",
+      "powerKva": 150,
+      "workforce": 65,
+      "builtUpAreaSqFt": 18000,
+      "description": "High-precision CNC turning, metal component washing, and surface finishing facility requiring dedicated industrial effluent containment and high-tension electrical sanction."
+    },
+    {
+      "id": "profile-greenleaf-agro",
+      "name": "Greenleaf Agro-Processing",
+      "companyName": "Greenleaf Agro Foods Ltd.",
+      "location": "Baramati Mega Food Park, Pune",
+      "stateOrRegion": "Maharashtra",
+      "sector": "food_processing",
+      "sectorLabel": "Agro-Foods & Grain Milling",
+      "pollutionCategory": "green",
+      "powerKva": 60,
+      "workforce": 35,
+      "builtUpAreaSqFt": 12500,
+      "description": "Grain sorting, dehydration, and packaging unit with organic wash-water discharge under green regulatory threshold."
+    },
+    {
+      "id": "profile-voltix-elec",
+      "name": "Voltix Microelectronics",
+      "companyName": "Voltix Electronics Assembly LLP",
+      "location": "TTC Industrial Zone, Navi Mumbai",
+      "stateOrRegion": "Maharashtra",
+      "sector": "electronics",
+      "sectorLabel": "PCB Surface Mount Assembly",
+      "pollutionCategory": "white",
+      "powerKva": 30,
+      "workforce": 45,
+      "builtUpAreaSqFt": 8500,
+      "description": "Cleanroom electronic board assembly, zero effluent discharge, non-polluting dry assembly operations."
+    }
+  ],
+  "documents": [
+    {
+      "id": "DOC-1",
+      "code": "DOC-SITE-PLAN",
+      "title": "Approved Site Layout & Contour Plan",
+      "category": "site",
+      "description": "Master site boundary blueprint showing entry/exit gates, setbacks, and utility corridors certified by a Registered Architect.",
+      "isAvailableDefault": true,
+      "requiredByApprovalIds": ["node-2", "node-3", "node-5", "node-6"]
+    },
+    {
+      "id": "DOC-2",
+      "code": "DOC-TITLE-LEASE",
+      "title": "Land Title Deed / MIDC Industrial Lease Agreement",
+      "category": "legal",
+      "description": "Registered 95-year industrial lease deed along with possession receipt and survey demarcation certificate.",
+      "isAvailableDefault": true,
+      "requiredByApprovalIds": ["node-1", "node-3", "node-4"]
+    },
+    {
+      "id": "DOC-3",
+      "code": "DOC-DPR-MACH",
+      "title": "Detailed Project Report (DPR) & Machinery Schedule",
+      "category": "engineering",
+      "description": "List of capital plant equipment, installed HP rating, raw material flow diagram, and manufacturing process description.",
+      "isAvailableDefault": true,
+      "requiredByApprovalIds": ["node-2", "node-4", "node-6"]
+    },
+    {
+      "id": "DOC-4",
+      "code": "DOC-STRUCT-STAB",
+      "title": "Structural Stability Certificate (Chartered Engineer)",
+      "category": "engineering",
+      "description": "Civil structural soundness endorsement confirming floor load-bearing capacity for heavy CNC equipment.",
+      "isAvailableDefault": false,
+      "requiredByApprovalIds": ["node-3", "node-6"]
+    },
+    {
+      "id": "DOC-5",
+      "code": "DOC-FIRE-SCHEME",
+      "title": "Fire Hydrant, Riser & Emergency Evacuation Scheme",
+      "category": "safety",
+      "description": "National Building Code (NBC) Part 4 compliance schematic detailing water storage tank, pump capacity, and escape corridors.",
+      "isAvailableDefault": true,
+      "requiredByApprovalIds": ["node-5", "node-8"]
+    },
+    {
+      "id": "DOC-6",
+      "code": "DOC-EFFLUENT-SCHEME",
+      "title": "Water Balance & Effluent Treatment Plant (ETP) Scheme",
+      "category": "environmental",
+      "description": "Mass balance calculations for daily fresh water intake, metal wash recycling loop, and zero liquid discharge (ZLD) specs.",
+      "isAvailableDefault": true,
+      "requiredByApprovalIds": ["node-2", "node-7", "node-10"]
+    },
+    {
+      "id": "DOC-7",
+      "code": "DOC-DISCOM-LOAD",
+      "title": "Connected Electrical Load Distribution Diagram",
+      "category": "engineering",
+      "description": "Single-line electrical diagram (SLD) prepared by a Class-A Electrical Contractor showing transformer & breaker ratings.",
+      "isAvailableDefault": false,
+      "requiredByApprovalIds": ["node-4", "node-9"]
+    },
+    {
+      "id": "DOC-8",
+      "code": "DOC-BLDG-COMPL",
+      "title": "Factory Shed Building Completion Certificate",
+      "category": "site",
+      "description": "Architect's certificate confirming construction executed strictly in accordance with sanctioned building plans.",
+      "isAvailableDefault": false,
+      "requiredByApprovalIds": ["node-6", "node-9"]
+    }
+  ],
+  "approvals": [
+    {
+      "id": "node-1",
+      "code": "PLOT-VERIF",
+      "title": "Industrial Plot Allotment Verification",
+      "department": "District Industries Centre / Industrial Dev Corp",
+      "stage": "pre_establishment",
+      "stageLabel": "Pre-Establishment",
+      "slaDays": 10,
+      "statutoryRuleRef": "MIDC Industrial Land Disposal Regulations, 1975 - Demo Dataset",
+      "isCriticalSpineVisual": true,
+      "prerequisiteIds": [],
+      "requiredDocumentIds": ["DOC-2"],
+      "inspectionChecklist": [
+        "Site boundary pillar demarcation confirmed",
+        "Road frontage width verification (min. 15m)",
+        "Zone classification validation (Industrial General)"
+      ],
+      "applicability": {}
+    },
+    {
+      "id": "node-2",
+      "code": "SPCB-CTE",
+      "title": "Consent to Establish (CTE)",
+      "department": "State Pollution Control Board (SPCB)",
+      "stage": "pre_establishment",
+      "stageLabel": "Pre-Establishment",
+      "slaDays": 45,
+      "statutoryRuleRef": "Water (Prevention & Control of Pollution) Act 1974, Sec 25 - Demo Dataset",
+      "isCriticalSpineVisual": true,
+      "prerequisiteIds": ["node-1"],
+      "requiredDocumentIds": ["DOC-1", "DOC-3", "DOC-6"],
+      "inspectionChecklist": [
+        "Review distance from nearest natural water body",
+        "Air emission stack height specification check",
+        "Adequacy of effluent containment trenching"
+      ],
+      "applicability": {
+        "pollutionCategories": ["orange", "red", "green"]
+      }
+    },
+    {
+      "id": "node-3",
+      "code": "BLDG-SANCT",
+      "title": "Industrial Building Plan Sanction",
+      "department": "Town Planning Authority / Planning Desk",
+      "stage": "pre_establishment",
+      "stageLabel": "Pre-Establishment",
+      "slaDays": 25,
+      "statutoryRuleRef": "Standard Unified Development Control Regulations (UDCPR) - Demo Dataset",
+      "isCriticalSpineVisual": true,
+      "prerequisiteIds": ["node-1"],
+      "requiredDocumentIds": ["DOC-1", "DOC-2", "DOC-4"],
+      "inspectionChecklist": [
+        "Ground coverage ratio verification (<50% footprint)",
+        "Mandatory front/rear open setback verification",
+        "Parking bay calculation against factory workforce"
+      ],
+      "applicability": {}
+    },
+    {
+      "id": "node-4",
+      "code": "DISCOM-HT",
+      "title": "HT Power Load Sanction (150 kVA)",
+      "department": "State Power Distribution Corporation (DISCOM)",
+      "stage": "pre_establishment",
+      "stageLabel": "Pre-Establishment",
+      "slaDays": 20,
+      "statutoryRuleRef": "Electricity Act 2003, Supply Code Regulations - Demo Dataset",
+      "isCriticalSpineVisual": false,
+      "prerequisiteIds": ["node-1"],
+      "requiredDocumentIds": ["DOC-2", "DOC-3", "DOC-7"],
+      "inspectionChecklist": [
+        "Substation feeder capacity load-flow check",
+        "HT metering room location & safety clearance",
+        "Earthing pit layout inspection"
+      ],
+      "applicability": {
+        "minPowerKva": 50
+      }
+    },
+    {
+      "id": "node-5",
+      "code": "FIRE-PROV",
+      "title": "Provisional Fire NOC",
+      "department": "State Directorate of Fire Services",
+      "stage": "pre_establishment",
+      "stageLabel": "Pre-Establishment",
+      "slaDays": 15,
+      "statutoryRuleRef": "Fire Prevention & Life Safety Measures Act, 2006 - Demo Dataset",
+      "isCriticalSpineVisual": false,
+      "prerequisiteIds": ["node-3"],
+      "requiredDocumentIds": ["DOC-1", "DOC-5"],
+      "inspectionChecklist": [
+        "Fire tender turnaround turning radius (min. 6m)",
+        "Underground static water storage tank sizing (100,000L)",
+        "Emergency staircase separation & fire doors"
+      ],
+      "applicability": {}
+    },
+    {
+      "id": "node-6",
+      "code": "FACT-PLAN",
+      "title": "Factory Building Plan Approval",
+      "department": "Directorate of Industrial Safety & Health (DISH)",
+      "stage": "pre_operation",
+      "stageLabel": "Pre-Operation",
+      "slaDays": 30,
+      "statutoryRuleRef": "Factories Act, 1948, Section 6 & State Factory Rules - Demo Dataset",
+      "isCriticalSpineVisual": true,
+      "prerequisiteIds": ["node-2", "node-3"],
+      "requiredDocumentIds": ["DOC-1", "DOC-3", "DOC-4", "DOC-8"],
+      "inspectionChecklist": [
+        "Worker ventilation & cubic space per operator calculation",
+        "Emergency exit gangway widths (min. 1.8m)",
+        "Sanitary & drinking water facilities headcount ratio",
+        "First aid and occupational health post space"
+      ],
+      "applicability": {
+        "minWorkforce": 10
+      }
+    },
+    {
+      "id": "node-7",
+      "code": "SPCB-CTO",
+      "title": "Consent to Operate (CTO)",
+      "department": "State Pollution Control Board (SPCB)",
+      "stage": "pre_operation",
+      "stageLabel": "Pre-Operation",
+      "slaDays": 30,
+      "statutoryRuleRef": "Water Act 1974 & Air Act 1981, Sec 21/26 - Demo Dataset",
+      "isCriticalSpineVisual": true,
+      "prerequisiteIds": ["node-2"],
+      "requiredDocumentIds": ["DOC-6"],
+      "inspectionChecklist": [
+        "Physical verification of Effluent Treatment Plant (ETP)",
+        "Online continuous effluent monitoring system (OCEMS) link",
+        "Acoustic enclosure inspection on DG sets",
+        "Hazardous waste storage shed concrete flooring"
+      ],
+      "applicability": {
+        "pollutionCategories": ["orange", "red", "green"]
+      }
+    },
+    {
+      "id": "node-8",
+      "code": "FIRE-FINAL",
+      "title": "Final Fire Safety Certificate",
+      "department": "State Directorate of Fire Services",
+      "stage": "pre_operation",
+      "stageLabel": "Pre-Operation",
+      "slaDays": 15,
+      "statutoryRuleRef": "Fire Prevention & Life Safety Rules - Demo Dataset",
+      "isCriticalSpineVisual": false,
+      "prerequisiteIds": ["node-5"],
+      "requiredDocumentIds": ["DOC-5"],
+      "inspectionChecklist": [
+        "Live wet riser pressure gauge testing (min. 3.5 bar)",
+        "Smoke detector alarm panel trigger test",
+        "Fire extinguisher valid hydrostatic test dates",
+        "Illuminated exit signage emergency backup battery check"
+      ],
+      "applicability": {}
+    },
+    {
+      "id": "node-9",
+      "code": "FACT-LIC",
+      "title": "Factory Registration & Operating License",
+      "department": "Directorate of Industrial Safety & Health (DISH)",
+      "stage": "pre_operation",
+      "stageLabel": "Pre-Operation",
+      "slaDays": 20,
+      "statutoryRuleRef": "Factories Act 1948, Section 6(1) & Form 4 - Demo Dataset",
+      "isCriticalSpineVisual": true,
+      "prerequisiteIds": ["node-6", "node-7"],
+      "requiredDocumentIds": ["DOC-7", "DOC-8"],
+      "inspectionChecklist": [
+        "Notice of occupation verification (Form 2)",
+        "Machinery safety guard installation inspection",
+        "Appointment of qualified safety officer (workforce threshold)",
+        "Statutory registers & worker insurance verification"
+      ],
+      "applicability": {
+        "minWorkforce": 10
+      }
+    },
+    {
+      "id": "node-10",
+      "code": "HAZ-AUTH",
+      "title": "Hazardous Waste Authorization (HWM)",
+      "department": "State Pollution Control Board (SPCB)",
+      "stage": "operational",
+      "stageLabel": "Operational Compliance",
+      "slaDays": 15,
+      "statutoryRuleRef": "Hazardous & Other Wastes Rules, 2016 - Demo Dataset",
+      "isCriticalSpineVisual": false,
+      "prerequisiteIds": ["node-7"],
+      "requiredDocumentIds": ["DOC-6"],
+      "inspectionChecklist": [
+        "Designated hazardous waste storage bay inspection (impervious floor)",
+        "Disposal agreement with Common HW Management Facility (CHWTSDF)",
+        "Manifest system record keeping compliance"
+      ],
+      "applicability": {
+        "pollutionCategories": ["orange", "red"]
+      }
+    }
+  ]
+}
